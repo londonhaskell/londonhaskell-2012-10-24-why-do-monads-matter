@@ -59,3 +59,8 @@ joinPref = composePref id id
 -- Define bind using composePref
 bindPref :: Pref a -> (a -> Pref b) -> Pref b
 bindPref e f = (composePref f id) e
+
+-- Prove we have implemented a monad by defining an instance of the type-class
+instance Monad Pref where
+    return = idPref
+    (>>=) = bindPref

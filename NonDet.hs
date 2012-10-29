@@ -85,3 +85,7 @@ joinP = composeP id id
 bindP :: P a -> (a -> P b) -> P b
 bindP e f = (composeP f id) e
 
+-- Prove we have implemented a monad by defining an instance of the type-class
+instance Monad P where
+    return = idP
+    (>>=) = bindP

@@ -46,3 +46,8 @@ joinErr = composeErr id id
 -- Define bind using composeErr
 bindErr :: Err a -> (a -> Err b) -> Err b
 bindErr e f = (composeErr f id) e
+
+-- Prove we have implemented a monad by defining an instance of the type-class
+instance Monad Err where
+    return = idErr
+    (>>=) = bindErr

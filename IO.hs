@@ -51,3 +51,8 @@ joinIO = composeIO id id
 -- Define bind using composeP
 bindIO :: IOAction a -> (a -> IOAction b) -> IOAction b
 bindIO e f = (composeIO f id) e
+
+-- Prove we have implemented a monad by defining an instance of the type-class
+instance Monad IOAction where
+    return = idIO
+    (>>=) = bindIO
