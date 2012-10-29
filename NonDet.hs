@@ -51,6 +51,7 @@ main = do
 -- Type synonym for Power-Sets
 -- A non-deterministic choice will be represented by a list
 data P a = P [a]
+        deriving Show
 
 -- Define some helper functions that un-wrap and re-wrap power-sets
 appendP :: P a -> P a -> P a

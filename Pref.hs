@@ -15,17 +15,17 @@ module Dependence where
 
 -- running main will display
 -- < < < foo > > >
-main = putStrLn (f "foo" cfg) -- pass in configuration at top level
+main = putStrLn (runPref (f "foo") cfg) -- pass in configuration at top level
          where f = left `composePref` right
                cfg = 3
        
 -- left adds brackets on left
 left :: String -> Pref String
-left s = \i -> (repeatString i "< ") ++ s
+left s = Pref (\i -> (repeatString i "< ") ++ s)
 
 -- right adds brackets on right
 right :: String -> Pref String
-right s = \i -> s ++ (repeatString i " >")
+right s = Pref (\i -> s ++ (repeatString i " >"))
 
 -- a version of repeat for Strings
 repeatString :: Integer -> String -> String
@@ -38,16 +38,19 @@ type Config = Integer
 
 -- Functions that can take preferences are returning a function
 -- that takes the configuration and returns a value
-type Pref a = (Config -> a)
+data Pref a = Pref (Config -> a)
+
+-- Helper function to un-wrap the preferences function and apply the configuration
+runPref (Pref f) c = f c
 
 -- Kleisli composition
 composePref :: (b -> Pref c) -> (a -> Pref b) -> (a -> Pref c)
-composePref f g x = \c -> let  y = (g x) c  -- Use the the same configuration
-                          in       (f y) c  -- in for both function
+composePref f g x = Pref (\c -> let y = runPref (g x) c  -- Use the the same configuration
+                                in      runPref (f y) c) -- in for both function
 
 -- Kleisli identity
 idPref :: a -> Pref a
-idPref x = \_ -> x  -- Ignore the configuration
+idPref x = Pref (\_ -> x)  -- Ignore the configuration
 
 -- Define join using composePref
 joinPref :: Pref (Pref a) -> Pref a
