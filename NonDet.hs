@@ -49,7 +49,10 @@ type P a = [a]
 -- Kleisli composition
 -- Apply f to every possible result from applying g to x and merge the results
 composeP :: (b -> P c) -> (a -> P b) -> (a -> P c)
-composeP f g x = [ z | y <- g x, z <- f y ] -- Start with version based on list comprehension
+composeP f g x = h ( g x ) -- Redefine so not using list comprehension
+              where
+                     h [] = []
+                     h (y:ys) = (f y) ++ (h ys)
 
 -- Kleisli identity
 idP :: a -> P a
@@ -57,4 +60,5 @@ idP x = [x] -- A choice of one
 
 -- Add two non-deterministic integers and return every possible combination
 addP :: P Integer -> P Integer -> P Integer
-addP xs ys = [ x + y | x <- xs, y <- ys ] -- Use a list comprehension again
+addP xs ys = (f xs `composeP` f ys) 0
+    where f n i = map (+i) n
