@@ -21,3 +21,7 @@ main = do
             print ((divBy 0 . divBy 7) 2310) -- (2310 / 7) / 0 => Divide By Zero Error!!!
             print ((divBy 5 . divBy 11) 2310) -- (2310 / 11) / 5
 
+-- Add an Err data-type that can record Success / Failure
+data Err a = OK a
+           | Error -- only 1 type of error but there could be more
+        deriving Show
