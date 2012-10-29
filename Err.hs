@@ -18,5 +18,6 @@ divBy x y = div y x
 -- An example including function composition
 main = do
             print ((divBy 2 . divBy 5) 100) -- (2310 / 5) / 2
-            print ((divBy 3 . divBy 7) 2310) -- (2310 / 7) / 3
+            print ((divBy 0 . divBy 7) 2310) -- (2310 / 7) / 0 => Divide By Zero Error!!!
             print ((divBy 5 . divBy 11) 2310) -- (2310 / 11) / 5
+
