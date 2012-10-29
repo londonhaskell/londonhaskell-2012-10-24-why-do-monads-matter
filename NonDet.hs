@@ -62,3 +62,10 @@ idP x = [x] -- A choice of one
 addP :: P Integer -> P Integer -> P Integer
 addP xs ys = (f xs `composeP` f ys) 0
     where f n i = map (+i) n
+
+-- Define join using a helper function
+joinP :: P (P a) -> P a
+joinP xss = h xss
+              where
+                     h [] = []
+                     h (y:ys) = y ++ (h ys)
