@@ -28,11 +28,13 @@ main = do
 -- to do next
 data IOAction a = Output String (IOAction a) -- Write the string and then the next action
                 | Wait (String -> IOAction a) -- Get a string and pass it to the function that returns the next action
+                | Return a
 
+-- Kleisli composition
 composeIO :: (b -> IOAction c) -> (a -> IOAction b) -> (a -> IOAction c)
 composeIO f g x = case (g x) of
                    Output s n -> Output s (composeIO f (\_ -> n) ())
                    Wait h -> Wait ( \s -> composeIO f h s )
 
--- But there is no way to define idIO
--- There must be something missing...
+-- Kleisli identity
+idIO x = Return x
