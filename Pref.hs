@@ -31,3 +31,10 @@ repeatString :: Integer -> String -> String
 repeatString i s = if (i <= 0)
                     then ""
                     else s ++ repeatString (i - 1) s
+
+-- Very simple configuration type
+type Config = Integer
+
+-- Functions that can take preferences are returning a function
+-- that takes the configuration and returns a value
+type Pref a = (Config -> a)
