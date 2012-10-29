@@ -42,3 +42,7 @@ main = do
     print (valueHand [Ace, Picture]) -- 11
     print (valueHand [Ace, Picture, Picture]) -- 21
     print (valueHand [Ace, Picture, Picture, Picture]) -- 31
+
+-- Type synonym for Power-Sets
+-- A non-deterministic choice will be represented by a list
+type P a = [a]
