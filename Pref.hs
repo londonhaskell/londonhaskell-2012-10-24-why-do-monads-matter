@@ -15,9 +15,9 @@ module Dependence where
 
 -- running main will display
 -- < < < foo > > >
--- Comment out code with normal composition since types don't line up now
--- main = putStrLn (f "foo")
---         where f = left . right
+main = putStrLn (f "foo" cfg) -- pass in configuration at top level
+         where f = left `composePref` right
+               cfg = 3
        
 -- left adds brackets on left
 left :: String -> Pref String
@@ -39,3 +39,12 @@ type Config = Integer
 -- Functions that can take preferences are returning a function
 -- that takes the configuration and returns a value
 type Pref a = (Config -> a)
+
+-- Kleisli composision
+composePref :: (b -> Pref c) -> (a -> Pref b) -> (a -> Pref c)
+composePref f g x = \c -> let  y = (g x) c  -- Use the the same configuration
+                          in       (f y) c  -- in for both function
+
+-- Kleisli identity
+idPref :: a -> Pref a
+idPref x = \_ -> x  -- Ignore the configuration
