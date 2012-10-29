@@ -23,3 +23,8 @@ outputReverse s = putStrLn (reverse s)
 main = do
            s <- waitForInput "Enter some test:"
            outputReverse s
+
+-- Each IOAction describes one type of action and the action
+-- to do next
+data IOAction a = Output String (IOAction a) -- Write the string and then the next action
+                | Wait (String -> IOAction a) -- Get a string and pass it to the function that returns the next action
