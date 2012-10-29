@@ -15,16 +15,17 @@ module Dependence where
 
 -- running main will display
 -- < < < foo > > >
-main = putStrLn (f "foo")
-        where f = left . right
+-- Comment out code with normal composition since types don't line up now
+-- main = putStrLn (f "foo")
+--         where f = left . right
        
 -- left adds brackets on left
-left :: String -> String
-left s = (repeatString 3 "< ") ++ s
+left :: String -> Pref String
+left s = \i -> (repeatString i "< ") ++ s
 
 -- right adds brackets on right
-right :: String -> String
-right s = s ++ (repeatString 3 " >")
+right :: String -> Pref String
+right s = \i -> s ++ (repeatString i " >")
 
 -- a version of repeat for Strings
 repeatString :: Integer -> String -> String
