@@ -64,8 +64,9 @@ addP xs ys = (f xs `composeP` f ys) 0
     where f n i = map (+i) n
 
 -- Define join using a helper function
+-- This looks very like composeP. Adding a couple of id functions...
 joinP :: P (P a) -> P a
-joinP xss = h xss
+joinP xss = h (id xss)
               where
                      h [] = []
-                     h (y:ys) = y ++ (h ys)
+                     h (y:ys) = (id y) ++ (h ys)
