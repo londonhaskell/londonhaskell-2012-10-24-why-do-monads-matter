@@ -17,13 +17,24 @@ divBy 0 y = Error
 divBy x y = OK (div y x)
 
 -- An example including function composition
--- Comment out because of error with composition since types don't line up now
--- main = do
---             print ((divBy 2 . divBy 5) 100) -- (2310 / 5) / 2
---             print ((divBy 0 . divBy 7) 2310) -- (2310 / 7) / 0 => Divide By Zero Error!!!
---             print ((divBy 5 . divBy 11) 2310) -- (2310 / 11) / 5
+main = do
+            print ((divBy 2 `composeErr` divBy 5) 2310) -- (2310 / 5) / 2
+            print ((divBy 0 `composeErr` divBy 7) 2310) -- (2310 / 7) / 0 => Divide By Zero Error!!!
+            print ((divBy 5 `composeErr` divBy 11) 2310) -- (2310 / 11) / 5
 
 -- Add an Err data-type that can record Success / Failure
 data Err a = OK a
            | Error -- only 1 type of error but there could be more
         deriving Show
+
+-- Kleisli composision
+-- Use a type like (f . g) x :: (b -> c) -> (a -> b) -> (a -> c)
+-- but it is for Kleisli arrows (a -> Err b)
+composeErr :: (b -> Err c) -> (a -> Err b) -> (a -> Err c)
+composeErr f g x = case g x of          -- Apply g
+                        OK y -> f y     -- and check for success
+                        Error -> Error  -- or error
+
+-- Kleisli identity
+idErr :: a -> Err a
+idErr x = OK x  -- Always success
