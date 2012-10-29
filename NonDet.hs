@@ -66,3 +66,8 @@ addP xs ys = (f xs `composeP` f ys) 0
 -- Define join using composeP
 joinP :: P (P a) -> P a
 joinP = composeP id id
+
+-- Define bind using composeP
+bindP :: P a -> (a -> P b) -> P b
+bindP e f = (composeP f id) e
+
