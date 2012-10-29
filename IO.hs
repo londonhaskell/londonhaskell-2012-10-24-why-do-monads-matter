@@ -43,3 +43,11 @@ composeIO f g x = case (g x) of
 -- Kleisli identity
 idIO :: a -> IOAction a
 idIO x = Return x
+
+-- Define join using composeIO
+joinIO :: IOAction (IOAction a) -> IOAction a
+joinIO = composeIO id id
+
+-- Define bind using composeP
+bindIO :: IOAction a -> (a -> IOAction b) -> IOAction b
+bindIO e f = (composeIO f id) e

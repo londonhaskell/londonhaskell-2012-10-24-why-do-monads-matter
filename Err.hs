@@ -38,3 +38,11 @@ composeErr f g x = case g x of          -- Apply g
 -- Kleisli identity
 idErr :: a -> Err a
 idErr x = OK x  -- Always success
+
+-- Define join using composeErr
+joinErr :: Err (Err a) -> Err a
+joinErr = composeErr id id
+
+-- Define bind using composeErr
+bindErr :: Err a -> (a -> Err b) -> Err b
+bindErr e f = (composeErr f id) e

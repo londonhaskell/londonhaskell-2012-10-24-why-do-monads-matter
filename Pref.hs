@@ -48,3 +48,12 @@ composePref f g x = \c -> let  y = (g x) c  -- Use the the same configuration
 -- Kleisli identity
 idPref :: a -> Pref a
 idPref x = \_ -> x  -- Ignore the configuration
+
+-- Define join using composePref
+joinPref :: Pref (Pref a) -> Pref a
+joinPref = composePref id id
+
+-- Define bind using composePref
+bindPref :: Pref a -> (a -> Pref b) -> Pref b
+bindPref e f = (composePref f id) e
+
