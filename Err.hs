@@ -27,7 +27,7 @@ data Err a = OK a
            | Error -- only 1 type of error but there could be more
         deriving Show
 
--- Kleisli composision
+-- Kleisli composition
 -- Use a type like (f . g) x :: (b -> c) -> (a -> b) -> (a -> c)
 -- but it is for Kleisli arrows (a -> Err b)
 composeErr :: (b -> Err c) -> (a -> Err b) -> (a -> Err c)

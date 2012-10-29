@@ -40,7 +40,7 @@ type Config = Integer
 -- that takes the configuration and returns a value
 type Pref a = (Config -> a)
 
--- Kleisli composision
+-- Kleisli composition
 composePref :: (b -> Pref c) -> (a -> Pref b) -> (a -> Pref c)
 composePref f g x = \c -> let  y = (g x) c  -- Use the the same configuration
                           in       (f y) c  -- in for both function
