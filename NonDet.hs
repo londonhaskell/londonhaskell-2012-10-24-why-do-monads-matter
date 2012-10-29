@@ -22,14 +22,20 @@ data Card = Ace
           | Picture
 
 valueCard :: Card -> P Integer
-valueCard Ace = [1,11] -- Aces can be either 1 or 11
-valueCard (Number x) = [x]
-valueCard Picture = [10]
+valueCard Ace = P [1,11] -- Aces can be either 1 or 11
+valueCard (Number x) = P [x]
+valueCard Picture = P [10]
 
 -- Hands are just lists of cards
-valueHand :: [Card] -> P Integer
-valueHand [] = [0]
-valueHand (c:cs) = (valueCard c) `addP` (valueHand cs)
+valueHand :: [Card] -> Integer
+valueHand cs = let (P hvs) = hv cs
+                   nonBust = filter (<= 21) hvs
+               in if not (null nonBust)
+                  then maximum nonBust
+                  else minimum hvs
+        where 
+            hv [] = P [0]
+            hv (c:cs) = (valueCard c) `addP` (hv cs)
 
 -- Print the value of some test hands
 main = do
@@ -44,24 +50,31 @@ main = do
 
 -- Type synonym for Power-Sets
 -- A non-deterministic choice will be represented by a list
-type P a = [a]
+data P a = P [a]
+
+-- Define some helper functions that un-wrap and re-wrap power-sets
+appendP :: P a -> P a -> P a
+appendP (P xs) (P ys) = P (xs ++ ys)
+
+mapP :: (a -> b) -> P a -> P b
+mapP f (P xs) = P (map f xs)
 
 -- Kleisli composition
 -- Apply f to every possible result from applying g to x and merge the results
 composeP :: (b -> P c) -> (a -> P b) -> (a -> P c)
 composeP f g x = h ( g x ) -- Redefine so not using list comprehension
               where
-                     h [] = []
-                     h (y:ys) = (f y) ++ (h ys)
+                     h (P []) = P []
+                     h (P (y:ys)) = (f y) `appendP` (h (P ys))
 
 -- Kleisli identity
 idP :: a -> P a
-idP x = [x] -- A choice of one
+idP x = P [x] -- A choice of one
 
 -- Add two non-deterministic integers and return every possible combination
 addP :: P Integer -> P Integer -> P Integer
 addP xs ys = (f xs `composeP` f ys) 0
-    where f n i = map (+i) n
+    where f n i = mapP (+i) n
 
 -- Define join using composeP
 joinP :: P (P a) -> P a
