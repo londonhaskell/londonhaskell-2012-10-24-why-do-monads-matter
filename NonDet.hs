@@ -29,20 +29,18 @@ valueCard Picture = [10]
 -- Hands are just lists of cards
 valueHand :: [Card] -> P Integer
 valueHand [] = [0]
--- Not clear how to define the recusive case. So
--- use undefined as a place holder to allow type checking
-valueHand (c:cs) = undefined -- (valueCard c) + (valueHand cs)
+valueHand (c:cs) = (valueCard c) `addP` (valueHand cs)
 
 -- Print the value of some test hands
 main = do
     print (valueHand []) -- 0
-    print (valueHand [Ace, Number 2, Number 3]) -- 6
-    print (valueHand [Ace, Ace, Number 2]) -- 4
-    print (valueHand [Ace, Ace, Ace]) -- 3
+    print (valueHand [Ace, Number 2, Number 3]) -- 6 or 16
+    print (valueHand [Ace, Ace, Number 2]) -- 4, 14 or 24
+    print (valueHand [Ace, Ace, Ace]) -- 3, 13, 23 or 33
     print (valueHand [Picture, Picture]) -- 20
-    print (valueHand [Ace, Picture]) -- 11
-    print (valueHand [Ace, Picture, Picture]) -- 21
-    print (valueHand [Ace, Picture, Picture, Picture]) -- 31
+    print (valueHand [Ace, Picture]) -- 11 or 21
+    print (valueHand [Ace, Picture, Picture]) -- 21 or 31
+    print (valueHand [Ace, Picture, Picture, Picture]) -- 31 or 41
 
 -- Type synonym for Power-Sets
 -- A non-deterministic choice will be represented by a list
@@ -56,3 +54,7 @@ composeP f g x = [ z | y <- g x, z <- f y ] -- Start with version based on list 
 -- Kleisli identity
 idP :: a -> P a
 idP x = [x] -- A choice of one
+
+-- Add two non-deterministic integers and return every possible combination
+addP :: P Integer -> P Integer -> P Integer
+addP xs ys = [ x + y | x <- xs, y <- ys ] -- Use a list comprehension again
