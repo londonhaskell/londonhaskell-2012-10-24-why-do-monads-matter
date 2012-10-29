@@ -21,16 +21,17 @@ data Card = Ace
           | Number Integer
           | Picture
 
--- Start with a version where Ace is only worth 1
-valueCard :: Card -> Integer
-valueCard Ace = 1
-valueCard (Number x) = x
-valueCard Picture = 10
+valueCard :: Card -> P Integer
+valueCard Ace = [1,11] -- Aces can be either 1 or 11
+valueCard (Number x) = [x]
+valueCard Picture = [10]
 
 -- Hands are just lists of cards
-valueHand :: [Card] -> Integer
-valueHand [] = 0
-valueHand (c:cs) = (valueCard c) + (valueHand cs)
+valueHand :: [Card] -> P Integer
+valueHand [] = [0]
+-- Not clear how to define the recusive case. So
+-- use undefined as a place holder to allow type checking
+valueHand (c:cs) = undefined -- (valueCard c) + (valueHand cs)
 
 -- Print the value of some test hands
 main = do
