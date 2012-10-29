@@ -47,3 +47,12 @@ main = do
 -- Type synonym for Power-Sets
 -- A non-deterministic choice will be represented by a list
 type P a = [a]
+
+-- Kleisli composision
+-- Apply f to every possible result from applying g to x and merge the results
+composeP :: (b -> P c) -> (a -> P b) -> (a -> P c)
+composeP f g x = [ z | y <- g x, z <- f y ] -- Start with version based on list comprehension
+
+-- Kleisli identity
+idP :: a -> P a
+idP x = [x] -- A choice of one
