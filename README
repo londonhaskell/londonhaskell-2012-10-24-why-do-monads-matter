@@ -3,3 +3,25 @@ Derek Wright the London Haskell user group on 24th October 2012.
 
 Based on the original blog post by Chris Smith:
 http://cdsmith.wordpress.com/2012/04/18/why-do-monads-matter/
+
+
+Video:
+http://www.youtube.com/watch?v=3q8xYFDYLeI
+
+
+London Haskell video channel:
+http://www.youtube.com/user/LondonHaskell
+
+
+PDF with animations (for on-screen viewing):
+http://files.londonhaskell.org/2012/10/24/WhyDoMonadsMatter-WithAnimations.pdf
+
+PDF (with most of the animations removed for printing):
+http://files.londonhaskell.org/2012/10/24/WhyDoMonadsMatter.pdf
+
+PowerPoint Presentation (with all the animations!):
+http://files.londonhaskell.org/2012/10/24/WhyDoMonadsMatter.pptx
+
+
+Code on GitHub:
+https://github.com/londonhaskell/londonhaskell-2012-10-24-why-do-monads-matter
