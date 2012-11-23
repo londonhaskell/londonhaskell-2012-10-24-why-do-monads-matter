@@ -19,15 +19,16 @@ outputReverse s = Output (reverse s) (Return ())
 
 -- Define a main using these functions
 -- Using composition we want something like:
--- main = ( outputReverse . waitForInput "Enter some test:")
-main = runIO ((outputReverse `composeIO` waitForInput) "Enter some test:")
+-- main = ( outputReverse . waitForInput "Enter some text:")
+main = runIO ((outputReverse `composeIO` waitForInput) "Enter some text:")
 
 -- Each IOAction describes one type of action and the action
 -- to do next
-data IOAction a = Output String (IOAction a) -- Write the string and then the next action
+data IOAction a = Output String (IOAction a)  -- Write the string and then the next action
                 | Wait (String -> IOAction a) -- Get a string and pass it to the function that returns the next action
-                | Return a
+                | Return a                    -- Turn a value into an IOAction
 
+-- Execute an IOAction
 runIO :: IOAction a -> IO a
 runIO (Output s n) = do { putStrLn s ; runIO n }
 runIO (Wait f) = do { s <- getLine ; runIO (f s) }
